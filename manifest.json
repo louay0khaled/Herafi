@@ -11,19 +11,19 @@
   "theme_color": "#0B2545",
   "icons": [
     {
-      "src": "icons/icon-192x192.png",
+      "src": "herafi/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/icon-512x512.png",
+      "src": "herafi/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "icons/maskable_icon.png",
+      "src": "herfai/icons/maskable_icon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
