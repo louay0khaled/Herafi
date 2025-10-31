@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'artisan-connect-cache-v5';
+const CACHE_NAME = 'artisan-connect-cache-v6';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -24,7 +24,9 @@ const urlsToCache = [
   '/icons/icon-512x512.png',
   '/icons/maskable-icon-512x512.png',
   'https://cdn.tailwindcss.com',
-  'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&family=Cairo:wght@900&display=swap'
+  'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&family=Cairo:wght@900&display=swap',
+  'https://aistudiocdn.com/react@^19.2.0',
+  'https://aistudiocdn.com/react-dom@^19.2.0/client'
 ];
 
 self.addEventListener('install', event => {
