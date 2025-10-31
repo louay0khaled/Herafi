@@ -1,8 +1,9 @@
 
-const CACHE_NAME = 'artisan-connect-cache-v2';
+const CACHE_NAME = 'artisan-connect-cache-v3';
 const urlsToCache = [
   '/',
   '/index.html',
+  '/manifest.json',
   '/icon.svg',
   '/maskable-icon.svg',
   '/index.tsx',
@@ -14,10 +15,7 @@ const urlsToCache = [
   '/components/ArtisanCard.tsx',
   '/components/ArtisanProfileModal.tsx',
   '/components/FilterPanel.tsx',
-  'https://cdn.tailwindcss.com',
-  'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap',
-  'https://fonts.gstatic.com/s/tajawal/v9/Iura6YBwB5j_7_j23J-h-JM53g.woff2', // Pre-caching fonts
-  'https://fonts.gstatic.com/s/amiri/v20/J7acnpd8CGxBHpU2iL_S-Q.woff2'
+  '/components/SplashScreen.tsx'
 ];
 
 self.addEventListener('install', event => {
@@ -44,12 +42,10 @@ self.addEventListener('fetch', event => {
 
         return fetch(event.request).then(
           response => {
-            // Check if we received a valid response
-            if(!response || response.status !== 200 || response.type !== 'basic') {
-              if (event.request.url.startsWith('https://aistudiocdn.com')) {
-                 // Don't cache opaque responses from CDNs
-                 return response;
-              }
+            // Check if we received a valid response.
+            // A response with status 0 is an opaque response for a third-party resource, which we want to cache.
+            if(!response || (response.status !== 200 && response.status !== 0)) {
+              return response;
             }
 
             const responseToCache = response.clone();
