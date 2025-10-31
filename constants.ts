@@ -1,4 +1,4 @@
-export const TRADES: string[] = ['كهربائي', 'نجّار', 'سبّاك', 'دهّان', 'بنّاء', 'مبلّط'];
+export const TRADES: string[] = ['كهربائي', 'نجّار', 'سبّاك', 'دهّان', 'بنّاء', 'مبلّط', 'طيّان', 'حدّاد'];
 export const CITIES: string[] = ['دمشق', 'ريف دمشق', 'حلب', 'حمص', 'حماة', 'اللاذقية', 'طرطوس', 'دير الزور', 'الحسكة', 'الرقة', 'إدلب', 'درعا', 'السويداء', 'القنيطرة'];
 
 // A simple, professional placeholder SVG icon for artisans without a gallery image.
