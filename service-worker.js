@@ -1,4 +1,3 @@
-
 const CACHE_NAME = 'artisan-connect-cache-v8';
 const urlsToCache = [
   '/',
@@ -17,8 +16,6 @@ const urlsToCache = [
   'components/SplashScreen.tsx',
   'components/icon.svg',
   'maskable-icon.svg',
-  'icons/icon-192x192.png',
-  'icons/icon-512x512.png',
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&family=Cairo:wght@900&display=swap',
   'https://aistudiocdn.com/react@^19.2.0',
