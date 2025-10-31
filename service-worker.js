@@ -1,11 +1,12 @@
 
-const CACHE_NAME = 'artisan-connect-cache-v3';
+const CACHE_NAME = 'artisan-connect-cache-v4';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/icon.svg',
-  '/maskable-icon.svg',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png',
+  '/icons/maskable-icon-512x512.png',
   '/index.tsx',
   '/App.tsx',
   '/types.ts',
