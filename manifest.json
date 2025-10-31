@@ -1,10 +1,10 @@
 {
   "name": "حرفي | Artisan Connect",
   "short_name": "حرفي",
-  "id": "/",
+  "id": "/?id=artisan-connect",
   "description": "تطبيق أنيق يربط الحرفيين المهرة بالعملاء الذين يحتاجون إلى خدماتهم.",
   "lang": "ar",
-  "start_url": "/",
+  "start_url": ".",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
@@ -13,25 +13,25 @@
   "categories": ["business", "lifestyle", "productivity"],
   "icons": [
     {
-      "src": "/icons/icon-192x192.png",
+      "src": "icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icons/icon-512x512.png",
+      "src": "icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-        "src": "/components/icon.svg",
+        "src": "components/icon.svg",
         "sizes": "any",
         "type": "image/svg+xml",
         "purpose": "any"
     },
     {
-      "src": "/components/maskable-icon.svg",
+      "src": "maskable-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
@@ -39,14 +39,14 @@
   ],
   "screenshots": [
     {
-      "src": "/screenshots/screenshot-mobile.png",
+      "src": "screenshots/screenshot-mobile.png",
       "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "عرض الحرفيين على الهاتف"
     },
     {
-      "src": "/screenshots/screenshot-desktop.png",
+      "src": "screenshots/screenshot-desktop.png",
       "sizes": "1920x1080",
       "type": "image/png",
       "form_factor": "wide",
