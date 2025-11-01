@@ -33,6 +33,8 @@ const assetsToCache = [
   '/maskable-icon.svg',
   '/icon-192.svg',
   '/icon-512.svg',
+  '/icon-192.png',
+  '/icon-512.png',
   '/screenshot-desktop.svg',
   '/screenshot-mobile.svg',
 
