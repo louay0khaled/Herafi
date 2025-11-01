@@ -27,6 +27,7 @@ const assetsToCache = [
   '/components/icons.tsx',
   '/components/SplashScreen.tsx',
   '/components/StarRating.tsx',
+  '/components/PwaFeaturesModal.tsx',
   
   // Icons and Images
   '/icon.svg',
@@ -37,6 +38,7 @@ const assetsToCache = [
   '/icon-512.png',
   '/screenshot-desktop.svg',
   '/screenshot-mobile.svg',
+  '/widget-screenshot.svg',
 
   // External assets
   'https://cdn.tailwindcss.com',
@@ -81,36 +83,124 @@ self.addEventListener('activate', event => {
   );
 });
 
+// -- PWA FEATURES --
+
+// Background Sync
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'add-review-sync') {
+    console.log('Service Worker: Background sync event triggered.');
+    event.waitUntil(
+      self.registration.showNotification('تمت المزامنة!', {
+        body: 'تمت مزامنة بياناتك في الخلفية بنجاح.',
+        icon: '/icon-192.png'
+      })
+    );
+  }
+});
+
+// Periodic Sync
+self.addEventListener('periodicsync', (event) => {
+  if (event.tag === 'get-latest-artisans') {
+    console.log('Service Worker: Periodic sync event triggered.');
+    event.waitUntil(
+      self.registration.showNotification('تحديثات جديدة!', {
+        body: 'تم البحث عن حرفيين جدد في منطقتك.',
+        icon: '/icon-192.png'
+      })
+    );
+  }
+});
+
+// Push Notifications
+self.addEventListener('push', (event) => {
+  let data = { title: 'رسالة جديدة', body: 'لديك إشعار جديد من تطبيق حرفي.' };
+  if (event.data) {
+    try {
+      data = event.data.json();
+    } catch (e) {
+      console.error('Push event data is not valid JSON', e);
+    }
+  }
+  
+  const title = data.title;
+  const options = {
+    body: data.body,
+    icon: '/icon-192.png',
+    badge: '/icon.svg'
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+
+// -- WORKBOX ROUTING --
+
 if (workbox.navigationPreload.isSupported()) {
   workbox.navigationPreload.enable();
 }
 
-// StaleWhileRevalidate for all requests. The manual fetch listener below will override for navigation.
+// Share Target Route: Intercepts POST requests from the share action.
 workbox.routing.registerRoute(
-  new RegExp('.*'),
+  ({url, request}) => url.pathname === '/share-target' && request.method === 'POST',
+  async ({event}) => {
+    const formData = await event.request.formData();
+    const text = formData.get('text') || '';
+    const title = formData.get('title') || '';
+    // Redirect to the main page with shared data in query params
+    const redirectUrl = `/?shared_title=${encodeURIComponent(title)}&shared_text=${encodeURIComponent(text)}`;
+    return Response.redirect(redirectUrl, 303);
+  }
+);
+
+// Widget Data Route: Serves JSON data for the PWA widget.
+workbox.routing.registerRoute(
+  ({url}) => url.pathname === '/widget-data.json',
+  () => {
+    // In a real app, this would fetch dynamic data. Here we use mock data.
+    const mockData = {
+      "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+      "type": "AdaptiveCard",
+      "version": "1.5",
+      "body": [
+        {
+          "type": "TextBlock",
+          "text": "أحمد النجار",
+          "weight": "bolder",
+          "size": "medium"
+        },
+        {
+          "type": "TextBlock",
+          "text": "نجّار",
+          "isSubtle": true,
+          "spacing": "none"
+        }
+      ]
+    };
+    return new Response(JSON.stringify(mockData), { headers: { 'Content-Type': 'application/json' } });
+  }
+);
+
+// Navigation Route: Network first, then cache, with an offline fallback.
+workbox.routing.registerRoute(
+  ({request}) => request.mode === 'navigate',
+  new workbox.strategies.NetworkFirst({
+    cacheName: 'pages',
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 50,
+      }),
+      {
+        handlerDidError: async () => {
+          return await caches.match(offlineFallbackPage);
+        }
+      }
+    ],
+  })
+);
+
+// Default Route for assets: Stale-while-revalidate for fast responses.
+workbox.routing.registerRoute(
+  ({request}) => ['style', 'script', 'worker', 'font', 'image'].includes(request.destination),
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: CACHE
   })
 );
-
-// Network-first with offline fallback for navigation requests
-self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
-    event.respondWith((async () => {
-      try {
-        const preloadResp = await event.preloadResponse;
-        if (preloadResp) {
-          return preloadResp;
-        }
-
-        const networkResp = await fetch(event.request);
-        return networkResp;
-      } catch (error) {
-        console.log('Fetch failed for navigation; returning offline page.', error);
-        const cache = await caches.open(CACHE);
-        const cachedResp = await cache.match(offlineFallbackPage);
-        return cachedResp;
-      }
-    })());
-  }
-});

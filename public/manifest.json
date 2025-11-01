@@ -9,8 +9,15 @@
   "scope": "/",
   "display": "standalone",
   "display_override": [
-    "window-controls-overlay"
+    "window-controls-overlay",
+    "tabbed"
   ],
+  "tab_strip": {
+    "home_tab": "new-tab-page",
+    "new_tab_button": {
+      "url": "/"
+    }
+  },
   "orientation": "portrait-primary",
   "background_color": "#F7F5F2",
   "theme_color": "#0B2545",
@@ -91,5 +98,58 @@
   ],
   "launch_handler": {
     "client_mode": "focus-existing"
+  },
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "text/plain": [
+          ".txt"
+        ]
+      }
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+artisan",
+      "url": "/handle-protocol?id=%s"
+    }
+  ],
+  "share_target": {
+    "action": "/share-target",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text"
+    }
+  },
+  "widgets": [
+    {
+      "name": "حرفي متميز",
+      "description": "عرض حرفي متميز من قائمتك",
+      "tag": "featured-artisan",
+      "template": "ms-adaptive-card",
+      "data": "/widget-data.json",
+      "screenshots": [
+        {
+          "src": "/widget-screenshot.svg",
+          "sizes": "600x600",
+          "type": "image/svg+xml"
+        }
+      ],
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "any"
+        }
+      ]
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "note_taking": {
+    "new_note_url": "/new-note"
   }
 }

@@ -5,8 +5,9 @@ import { TRADES, CITIES } from './constants';
 import { ArtisanCard } from './components/ArtisanCard';
 import { ArtisanProfileModal } from './components/ArtisanProfileModal';
 import { FilterPanel } from './components/FilterPanel';
-import { BriefcaseIcon, CloseIcon, MenuIcon, PlusIcon } from './components/icons';
+import { BriefcaseIcon, CloseIcon, MenuIcon, PlusIcon, BellIcon } from './components/icons';
 import { SplashScreen } from './components/SplashScreen';
+import { PwaFeaturesModal } from './components/PwaFeaturesModal';
 
 // --- API Simulation Service ---
 const api = {
@@ -304,18 +305,53 @@ const App: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [appState, setAppState] = useState<'splashing' | 'finishing' | 'ready'>('splashing');
   const logoClickTimeoutRef = React.useRef<number | null>(null);
+  
+  const [isPwaModalOpen, setIsPwaModalOpen] = useState(false);
+  const [launchParams, setLaunchParams] = useState<any>(null);
 
   useEffect(() => {
+    // --- PWA Launch Handlers ---
+    const handleLaunch = () => {
+        // 1. File Handling
+        if ('launchQueue' in window) {
+            (window as any).launchQueue.setConsumer((params: any) => {
+                if (params.files && params.files.length > 0) {
+                    console.log('App launched with files:', params.files);
+                    setLaunchParams({ type: 'file', files: params.files });
+                    setIsPwaModalOpen(true);
+                }
+            });
+        }
+
+        // 2. Share Target & Protocol/Note-taking (via URL)
+        const url = new URL(window.location.href);
+        const sharedTitle = url.searchParams.get('shared_title');
+        const sharedText = url.searchParams.get('shared_text');
+        const protocolId = url.searchParams.get('id');
+        
+        if (sharedTitle || sharedText) {
+            setLaunchParams({ type: 'share', title: sharedTitle, text: sharedText });
+            setIsPwaModalOpen(true);
+            window.history.replaceState({}, document.title, "/");
+        } else if (url.pathname.startsWith('/handle-protocol') && protocolId) {
+            setLaunchParams({ type: 'protocol', url: protocolId });
+            setIsPwaModalOpen(true);
+            window.history.replaceState({}, document.title, "/");
+        } else if (url.pathname.startsWith('/new-note')) {
+            setLaunchParams({ type: 'note' });
+            setIsPwaModalOpen(true);
+            window.history.replaceState({}, document.title, "/");
+        }
+    };
+    handleLaunch();
+
+    // --- Splash Screen Logic ---
     if (appState === 'splashing') {
-        const timer = setTimeout(() => {
-            setAppState('finishing');
-        }, 1000); // Duration of the splash animation
+        const timer = setTimeout(() => setAppState('finishing'), 1000);
         return () => clearTimeout(timer);
     }
     if (appState === 'finishing') {
-        const timer = setTimeout(() => {
-            setAppState('ready');
-        }, 500); // Duration of the fade-out
+        const timer = setTimeout(() => setAppState('ready'), 500);
         return () => clearTimeout(timer);
     }
   }, [appState]);
@@ -366,13 +402,10 @@ const App: React.FC = () => {
     TRADES.forEach(trade => {
         const artisansForTrade = artisans.filter(a => a.trade === trade);
         if (artisansForTrade.length > 0) {
-            // Sort by rating, then by number of reviews as a tie-breaker
             artisansForTrade.sort((a, b) => {
                 const ratingA = getAverageRating(a);
                 const ratingB = getAverageRating(b);
-                if (ratingB !== ratingA) {
-                    return ratingB - ratingA;
-                }
+                if (ratingB !== ratingA) return ratingB - ratingA;
                 return b.reviews.length - a.reviews.length;
             });
             result[trade] = artisansForTrade[0];
@@ -382,7 +415,7 @@ const App: React.FC = () => {
   }, [artisans, getAverageRating]);
 
   const handleAddReview = useCallback(async (artisanId: string, reviewData: Omit<Review, 'id' | 'date'>) => {
-    const newReview = await api.addReview(artisanId, reviewData);
+    await api.addReview(artisanId, reviewData);
     const updatedArtisans = await api.fetchArtisans();
     setArtisans(updatedArtisans);
     setSelectedArtisan(prev => prev && prev.id === artisanId ? updatedArtisans.find(a => a.id === artisanId) || null : prev);
@@ -390,12 +423,11 @@ const App: React.FC = () => {
 
   const handleSaveArtisan = useCallback(async (artisanData: Artisan | Omit<Artisan, 'id' | 'reviews'>) => {
       if ('id' in artisanData) {
-          const updatedArtisan = await api.updateArtisan(artisanData);
-          setArtisans(prev => prev.map(a => a.id === updatedArtisan.id ? updatedArtisan : a));
+          await api.updateArtisan(artisanData);
       } else {
-          const newArtisan = await api.addArtisan(artisanData);
-          setArtisans(prev => [...prev, newArtisan]);
+          await api.addArtisan(artisanData);
       }
+      setArtisans(await api.fetchArtisans());
   }, []);
   
   const handleDeleteArtisan = useCallback(async (artisanId: string) => {
@@ -435,12 +467,8 @@ const App: React.FC = () => {
   const isDefaultView = searchTerm === '' && filters.trade === '' && filters.city === '' && filters.minExperience === '' && filters.minRating === '';
 
   const renderContent = () => {
-    if (status === 'loading') {
-      return <p className="text-center text-slate text-lg py-10">جاري تحميل البيانات...</p>;
-    }
-    if (status === 'error') {
-      return <p className="text-center text-red-500 text-lg py-10">حدث خطأ أثناء تحميل البيانات. الرجاء المحاولة مرة أخرى.</p>;
-    }
+    if (status === 'loading') return <p className="text-center text-slate text-lg py-10">جاري تحميل البيانات...</p>;
+    if (status === 'error') return <p className="text-center text-red-500 text-lg py-10">حدث خطأ أثناء تحميل البيانات.</p>;
     
     if (isDefaultView) {
         const topArtisansList = TRADES.map(trade => topArtisansByTrade[trade]).filter(Boolean);
@@ -462,12 +490,7 @@ const App: React.FC = () => {
                         <section key={trade} aria-labelledby={`trade-title-${trade}`}>
                             <div className="flex justify-between items-center mb-4 border-b-2 border-navy/10 pb-2">
                                 <h2 id={`trade-title-${trade}`} className="text-3xl font-bold text-navy">{trade}</h2>
-                                <button
-                                    onClick={() => handleShowAllForTrade(trade)}
-                                    className="text-gold font-semibold hover:underline transition-colors"
-                                >
-                                    عرض الكل &larr;
-                                </button>
+                                <button onClick={() => handleShowAllForTrade(trade)} className="text-gold font-semibold hover:underline">عرض الكل &larr;</button>
                             </div>
                             <div className="w-full">
                                 <ArtisanCard artisan={topArtisan} onClick={() => handleCardClick(topArtisan)} />
@@ -505,98 +528,62 @@ const App: React.FC = () => {
 
         {isSidebarOpen && <div className="fixed inset-0 bg-black/60 z-40" onClick={() => setIsSidebarOpen(false)}></div>}
         <aside className={`fixed top-0 right-0 h-full w-80 max-w-full bg-navy text-ivory p-6 z-50 transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-            <button onClick={() => setIsSidebarOpen(false)} className="absolute top-5 left-5 text-ivory/70 hover:text-ivory" aria-label="إغلاق القائمة">
-                <CloseIcon className="h-7 w-7" />
-            </button>
+            <button onClick={() => setIsSidebarOpen(false)} className="absolute top-5 left-5 text-ivory/70 hover:text-ivory" aria-label="إغلاق القائمة"><CloseIcon className="h-7 w-7" /></button>
             <h2 className="text-3xl font-bold mb-10 mt-4 border-b border-ivory/20 pb-4">القائمة</h2>
             <nav>
-              <a
-                  href="https://wa.me/963992705838?text=أرغب%20في%20الانضمام%20إلى%20منصة%20حِرَفي"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-4 bg-ivory text-navy font-semibold py-3 px-5 rounded-lg hover:bg-ivory/90 transition-transform transform hover:scale-105"
-                  title="أضف خبراتك للمنصة"
-              >
-                  <PlusIcon className="h-6 w-6"/>
-                  <span className="text-base">أضف خبراتك للمنصة</span>
+              <a href="https://wa.me/963992705838?text=أرغب%20في%20الانضمام%20إلى%20منصة%20حِرَفي" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-4 bg-ivory text-navy font-semibold py-3 px-5 rounded-lg hover:bg-ivory/90 transition-transform transform hover:scale-105" title="أضف خبراتك للمنصة">
+                  <PlusIcon className="h-6 w-6"/><span className="text-base">أضف خبراتك للمنصة</span>
               </a>
             </nav>
         </aside>
 
         <div className="container mx-auto p-4 md:p-8">
           <header className="relative text-center mb-8 h-14">
-            <button 
-              onClick={() => setIsSidebarOpen(true)}
-              className="absolute top-0 right-0 p-2 text-navy hover:text-gold transition-colors"
-              aria-label="فتح القائمة"
-            >
-                <MenuIcon className="h-8 w-8" />
-            </button>
-            <h1 
-              onClick={handleLogoClick} 
-              className={`text-5xl font-bold text-navy cursor-pointer transition-opacity duration-300 ${appState !== 'ready' ? 'opacity-0' : 'opacity-100'}`}
-              title="لوحة تحكم المسؤول (انقر ثلاث مرات)"
-            >
-              حِرَفي
-            </h1>
+            <button onClick={() => setIsSidebarOpen(true)} className="absolute top-0 right-0 p-2 text-navy hover:text-gold" aria-label="فتح القائمة"><MenuIcon className="h-8 w-8" /></button>
+            <h1 onClick={handleLogoClick} className={`text-5xl font-bold text-navy cursor-pointer transition-opacity duration-300 ${appState !== 'ready' ? 'opacity-0' : 'opacity-100'}`} title="لوحة تحكم المسؤول (انقر ثلاث مرات)">حِرَفي</h1>
             <p className="text-slate text-xl mt-2">قم بعمل صيانة براحة و أمانة</p>
             {isAdmin && (
                 <div className="mt-4 flex items-center justify-center gap-4">
-                  <button
-                    onClick={() => { setArtisanToEdit(null); setIsFormModalOpen(true); }}
-                    className="bg-gold text-navy font-bold py-2 px-6 rounded-lg hover:bg-gold/90 transition-colors"
-                  >
+                  <button onClick={() => { setArtisanToEdit(null); setIsFormModalOpen(true); }} className="bg-gold text-navy font-bold py-2 px-6 rounded-lg hover:bg-gold/90">
                     + إضافة حرفي جديد
                   </button>
-                  <button
-                    onClick={() => setIsAdmin(false)}
-                    className="bg-slate text-ivory font-bold py-2 px-6 rounded-lg hover:bg-slate/80 transition-colors"
-                  >
-                    خروج
-                  </button>
+                  <button onClick={() => setIsAdmin(false)} className="bg-slate text-ivory font-bold py-2 px-6 rounded-lg hover:bg-slate/80">خروج</button>
                 </div>
               )}
           </header>
 
           <main>
-            <FilterPanel 
-                searchTerm={searchTerm} setSearchTerm={setSearchTerm}
-                filters={filters} setFilters={setFilters}
-            />
+            <FilterPanel searchTerm={searchTerm} setSearchTerm={setSearchTerm} filters={filters} setFilters={setFilters} />
             {renderContent()}
           </main>
 
-          { !isAdmin && 
-            <ArtisanProfileModal
-                artisan={selectedArtisan}
-                onClose={() => setSelectedArtisan(null)}
-                onAddReview={handleAddReview}
-            />
-          }
+          { !isAdmin && <ArtisanProfileModal artisan={selectedArtisan} onClose={() => setSelectedArtisan(null)} onAddReview={handleAddReview} /> }
           
-          {showAdminLogin && (
-            <AdminLoginModal
-                onClose={() => setShowAdminLogin(false)}
-                onSuccess={() => {
-                    setIsAdmin(true);
-                    setShowAdminLogin(false);
-                }}
-            />
-          )}
+          {showAdminLogin && <AdminLoginModal onClose={() => setShowAdminLogin(false)} onSuccess={() => { setIsAdmin(true); setShowAdminLogin(false); }} />}
 
-          {isAdmin && isFormModalOpen && (
-            <ArtisanFormModal 
-                onClose={() => setIsFormModalOpen(false)}
-                onSave={handleSaveArtisan}
-                onDelete={handleDeleteArtisan}
-                artisanToEdit={artisanToEdit}
-            />
-          )}
+          {isAdmin && isFormModalOpen && <ArtisanFormModal onClose={() => setIsFormModalOpen(false)} onSave={handleSaveArtisan} onDelete={handleDeleteArtisan} artisanToEdit={artisanToEdit} />}
           
           <footer className="text-center mt-12 text-slate/80 font-serif text-lg">
             <p>تم تصميم وتطوير هذا التطبيق بواسطة <span className="font-bold text-navy/90">Loùay Ô Khałed</span></p>
           </footer>
         </div>
+        
+        <div className="fixed bottom-6 left-6 z-40">
+            <button
+                onClick={() => setIsPwaModalOpen(true)}
+                className="bg-gold text-navy p-4 rounded-full shadow-lg hover:bg-gold/90 transform hover:scale-110 transition-all duration-300"
+                aria-label="ميزات التطبيق التقدمي"
+            >
+                <BellIcon className="h-8 w-8" />
+            </button>
+        </div>
+
+        {isPwaModalOpen && (
+            <PwaFeaturesModal
+                onClose={() => setIsPwaModalOpen(false)}
+                launchParams={launchParams}
+            />
+        )}
       </div>
     </>
   );
