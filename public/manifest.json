@@ -1,23 +1,13 @@
 {
-  "name": "حرفي | Artisan Connect",
-  "short_name": "حرفي",
+  "name": "حِرَفي | Artisan Connect",
+  "short_name": "حِرَفي",
   "description": "تطبيق أنيق يربط الحرفيين المهرة بالعملاء الذين يحتاجون إلى خدماتهم.",
   "lang": "ar",
   "dir": "rtl",
-  "start_url": ".",
+  "start_url": "/index.html",
   "id": "/",
   "scope": "/",
   "display": "standalone",
-  "display_override": [
-    "window-controls-overlay",
-    "tabbed"
-  ],
-  "tab_strip": {
-    "home_tab": "new-tab-page",
-    "new_tab_button": {
-      "url": "/"
-    }
-  },
   "orientation": "portrait-primary",
   "background_color": "#F7F5F2",
   "theme_color": "#0B2545",
@@ -87,25 +77,6 @@
   "launch_handler": {
     "client_mode": "focus-existing"
   },
-  "file_handlers": [
-    {
-      "action": "/",
-      "accept": {
-        "text/plain": [
-          ".txt"
-        ],
-        "application/artisan+json": [
-          ".artisan"
-        ]
-      }
-    }
-  ],
-  "protocol_handlers": [
-    {
-      "protocol": "web+artisan",
-      "url": "/handle-protocol?id=%s"
-    }
-  ],
   "share_target": {
     "action": "/share-target",
     "method": "POST",
@@ -137,11 +108,5 @@
         }
       ]
     }
-  ],
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
-  "note_taking": {
-    "new_note_url": "/new-note"
-  }
+  ]
 }
