@@ -29,42 +29,42 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/icon-192.svg",
+      "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon-512.svg",
+      "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon.svg",
+      "src": "/icon.png",
       "sizes": "any",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/maskable-icon.svg",
+      "src": "/maskable-icon.png",
       "sizes": "any",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable"
     }
   ],
   "screenshots": [
     {
-      "src": "/screenshot-desktop.svg",
+      "src": "/screenshot-desktop.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
       "label": "عرض قائمة الحرفيين على الكمبيوتر"
     },
     {
-      "src": "/screenshot-mobile.svg",
+      "src": "/screenshot-mobile.png",
       "sizes": "640x1136",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "narrow",
       "label": "عرض صفحة الحرفي على الموبايل"
     }
@@ -77,9 +77,9 @@
       "url": "/",
       "icons": [
         {
-          "src": "/icon.svg",
+          "src": "/icon.png",
           "sizes": "any",
-          "type": "image/svg+xml"
+          "type": "image/png"
         }
       ]
     }
@@ -124,15 +124,16 @@
       "data": "/widget-data.json",
       "screenshots": [
         {
-          "src": "/widget-screenshot.svg",
+          "src": "/widget-screenshot.png",
           "sizes": "600x600",
-          "type": "image/svg+xml"
+          "type": "image/png"
         }
       ],
       "icons": [
         {
-          "src": "/icon.svg",
-          "sizes": "any"
+          "src": "/icon.png",
+          "sizes": "any",
+          "type": "image/png"
         }
       ]
     }
