@@ -7,18 +7,48 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox
 
 const offlineFallbackPage = "index.html";
 
-// Pre-cache essential resources for the app to work offline.
+// A more comprehensive list of assets to cache for a full offline experience.
 const assetsToCache = [
+  // Core files
   '/',
   offlineFallbackPage,
   'manifest.json',
-  'index.tsx', // Assuming this path works as in the old SW
-  'App.tsx',     // Assuming this path works
+  
+  // Scripts
+  'index.tsx',
+  'App.tsx',
+  'types.ts',
+  'constants.ts',
+
+  // Components
+  'components/ArtisanCard.tsx',
+  'components/ArtisanProfileModal.tsx',
+  'components/FilterPanel.tsx',
+  'components/icons.tsx',
+  'components/SplashScreen.tsx',
+  'components/StarRating.tsx',
+  
+  // Icons and Images
+  'components/icon.svg',
+  'maskable-icon.svg',
+  '/icons/icon-72x72.png',
+  '/icons/icon-96x96.png',
+  '/icons/icon-128x128.png',
+  '/icons/icon-144x144.png',
+  '/icons/icon-152x152.png',
+  '/icons/icon-180x180.png', // For apple-touch-icon
+  '/icons/icon-192x192.png',
+  '/icons/icon-384x384.png',
+  '/icons/icon-512x512.png',
+  '/maskable-icon.png',
+
+  // External assets
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&family=Cairo:wght@900&display=swap',
   'https://aistudiocdn.com/react@^19.2.0',
   'https://aistudiocdn.com/react-dom@^19.2.0/client'
 ];
+
 
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") {
