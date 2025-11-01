@@ -1,86 +1,47 @@
-const CACHE_NAME = 'artisan-connect-cache-v12';
-const urlsToCache = [
+// This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
+// Based on the user's provided template, with necessary corrections for a robust offline experience.
+
+const CACHE = "pwabuilder-offline-page";
+
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
+
+const offlineFallbackPage = "index.html";
+
+// Pre-cache essential resources for the app to work offline.
+const assetsToCache = [
   '/',
-  'index.html',
+  offlineFallbackPage,
   'manifest.json',
-  'metadata.json',
-  'index.tsx',
-  'App.tsx',
-  'types.ts',
-  'constants.ts',
-  'components/icons.tsx',
-  'components/StarRating.tsx',
-  'components/ArtisanCard.tsx',
-  'components/ArtisanProfileModal.tsx',
-  'components/FilterPanel.tsx',
-  'components/SplashScreen.tsx',
-  'components/icon.svg',
-  'maskable-icon.svg',
-  'assets/icons/icon-72x72.png',
-  'assets/icons/icon-96x96.png',
-  'assets/icons/icon-128x128.png',
-  'assets/icons/icon-144x144.png',
-  'assets/icons/icon-152x152.png',
-  'assets/icons/icon-180x180.png',
-  'assets/icons/icon-192x192.png',
-  'assets/icons/icon-384x384.png',
-  'assets/icons/icon-512x512.png',
-  'assets/icons/maskable-icon.png',
-  'assets/screenshots/screen-narrow-1.png',
-  'assets/screenshots/screen-wide-1.png',
+  'index.tsx', // Assuming this path works as in the old SW
+  'App.tsx',     // Assuming this path works
   'https://cdn.tailwindcss.com',
   'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&family=Cairo:wght@900&display=swap',
   'https://aistudiocdn.com/react@^19.2.0',
   'https://aistudiocdn.com/react-dom@^19.2.0/client'
 ];
 
-self.addEventListener('install', event => {
-  // Perform install steps
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
+self.addEventListener('install', async (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Opened cache');
-        // Use addAll with a new Request object with cache: 'reload' to bypass HTTP cache
-        const requests = urlsToCache.map(url => new Request(url, { cache: 'reload' }));
-        return cache.addAll(requests);
+    caches.open(CACHE)
+      .then((cache) => {
+        console.log('Caching offline fallback page and essential assets');
+        return cache.addAll(assetsToCache);
+      })
+      .catch(err => {
+        console.error('Failed to cache assets during install:', err);
       })
   );
 });
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-
-        return fetch(event.request).then(
-          response => {
-            // Check if we received a valid response.
-            // A response with status 0 is an opaque response for a third-party resource, which we want to cache.
-            if(!response || (response.status !== 200 && response.status !== 0)) {
-              return response;
-            }
-
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
-          }
-        );
-      })
-    );
-});
-
-
+// Clean up old caches on activation
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
+  const cacheWhitelist = [CACHE];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
@@ -92,4 +53,38 @@ self.addEventListener('activate', event => {
       );
     })
   );
+});
+
+if (workbox.navigationPreload.isSupported()) {
+  workbox.navigationPreload.enable();
+}
+
+// StaleWhileRevalidate for all requests. The manual fetch listener below will override for navigation.
+workbox.routing.registerRoute(
+  new RegExp('.*'),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: CACHE
+  })
+);
+
+// Network-first with offline fallback for navigation requests
+self.addEventListener('fetch', (event) => {
+  if (event.request.mode === 'navigate') {
+    event.respondWith((async () => {
+      try {
+        const preloadResp = await event.preloadResponse;
+        if (preloadResp) {
+          return preloadResp;
+        }
+
+        const networkResp = await fetch(event.request);
+        return networkResp;
+      } catch (error) {
+        console.log('Fetch failed for navigation; returning offline page.', error);
+        const cache = await caches.open(CACHE);
+        const cachedResp = await cache.match(offlineFallbackPage);
+        return cachedResp;
+      }
+    })());
+  }
 });
