@@ -14,59 +14,17 @@
   "theme_color": "#0B2545",
   "categories": ["business", "lifestyle", "utilities"],
   "prefer_related_applications": false,
-  "edge_side_panel": {
-    "preferred_width": 480
-  },
 
   "icons": [
-    {
-      "src": "https://herafi-phi.vercel.app/assets/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png"
-    },
-    {
-      "src": "https://herafi-phi.vercel.app/assets/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png"
-    },
-    {
-      "src": "https://herafi-phi.vercel.app/assets/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
-    {
-      "src": "https://herafi-phi.vercel.app/assets/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png"
-    },
-    {
-      "src": "https://herafi-phi.vercel.app/assets/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png"
-    },
-    {
-      "src": "https://herafi-phi.vercel.app/assets/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://herafi-phi.vercel.app/assets/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png"
-    },
-    {
-      "src": "https://herafi-phi.vercel.app/assets/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "https://herafi-phi.vercel.app/assets/icons/maskable-icon.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "/icons/icon-72x72.png", "sizes": "72x72", "type": "image/png" },
+    { "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "/icons/icon-128x128.png", "sizes": "128x128", "type": "image/png" },
+    { "src": "/icons/icon-144x144.png", "sizes": "144x144", "type": "image/png" },
+    { "src": "/icons/icon-152x152.png", "sizes": "152x152", "type": "image/png" },
+    { "src": "/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-384x384.png", "sizes": "384x384", "type": "image/png" },
+    { "src": "/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
 
   "shortcuts": [
@@ -75,47 +33,14 @@
       "short_name": "بحث",
       "description": "ابحث عن حرفيين مهرة بالقرب منك",
       "url": "/",
-      "icons": [
-        {
-          "src": "https://herafi-phi.vercel.app/assets/icons/icon-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
     }
   ],
 
-  "launch_handler": {
-    "client_mode": "focus-existing"
-  },
+  "launch_handler": { "client_mode": "focus-existing" },
 
   "screenshots": [
-    {
-      "src": "https://herafi-phi.vercel.app/assets/screenshots/screen-narrow-1.png",
-      "type": "image/png",
-      "sizes": "1080x1920",
-      "form_factor": "narrow",
-      "label": "عرض قائمة الحرفيين"
-    },
-    {
-      "src": "https://herafi-phi.vercel.app/assets/screenshots/screen-wide-1.png",
-      "type": "image/png",
-      "sizes": "1920x1080",
-      "form_factor": "wide",
-      "label": "صفحة الملف الشخصي للحرفي"
-    }
-  ],
-
-  "protocol_handlers": [
-    {
-      "protocol": "web+herafi",
-      "url": "/?service=%s"
-    }
-  ],
-
-  "launch_url": "/",
-  "handle_links": "preferred",
-  "related_applications": [],
-  "iarc_rating_id": "0",
-  "capture_links": "new-client"
+    { "src": "/screen-narrow-1.png", "type": "image/png", "sizes": "1080x1920", "form_factor": "narrow", "label": "عرض قائمة الحرفيين" },
+    { "src": "/screen-wide-1.png", "type": "image/png", "sizes": "1920x1080", "form_factor": "wide", "label": "صفحة الملف الشخصي للحرفي" }
+  ]
 }
