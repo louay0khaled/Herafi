@@ -29,7 +29,7 @@ const assetsToCache = [
   'components/StarRating.tsx',
   
   // Icons and Images
-  'components/icon.svg',
+  'icon.svg',
   'maskable-icon.svg',
   '/icons/icon-72x72.png',
   '/icons/icon-96x96.png',
