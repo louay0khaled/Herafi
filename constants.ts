@@ -1,6 +1,7 @@
+
 export const TRADES: string[] = ['كهربائي', 'نجّار', 'سبّاك', 'دهّان', 'بنّاء', 'مبلّط', 'طيّان', 'حدّاد'];
 export const CITIES: string[] = ['دمشق', 'ريف دمشق', 'حلب', 'حمص', 'حماة', 'اللاذقية', 'طرطوس', 'دير الزور', 'الحسكة', 'الرقة', 'إدلب', 'درعا', 'السويداء', 'القنيطرة'];
 
-// A simple, professional placeholder SVG icon for artisans without a gallery image.
-// This is an icon of a wrench and a screwdriver.
-export const DEFAULT_ARTISAN_IMAGE_BASE64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2RiZThjNyI+PHBhdGggZD0iTTEyIDJBNCA0IDAgMCAwIDggNkg1djZhMSA0IDEgMCAwIDAgMSAxaDJhMSA0IDEgMCAwIDAgMS0xVjZIMTBhNCA0IDAgMCAwIDItNFptMi4yNSA2YTEuNSAxLjUgMCAwIDAtMS41IDEuNUg5LjI1YTEuNSAxLjUgMCAwIDAgMCAzaDEuNWExLjUgMS41IDAgMCAwIDEuNS0xLjV6TTguNDcgMTQuMDNhMSAxIDAgMCAwLTEuNDEuMDhsLTMuMTggMy4xOWExIDEgMCAwIDAgMCAxLjQybDEuNDIgMS40MmMuMzkuMzkgMS4wMi4zOSAxLjQxIDBsMy4xOS0zLjE4YTEgMSAwIDAgMC0uMDgtMS40MXYtMS40NmMtLjAyLS4yMi0uMS0uNDMtLjIzLS42ek0xNi45MyAxMy4wN2ExIDEgMCAwIDAgLjc0LS4zM2w0LjYyLTQuNjJhMSAxIDAgMCAwLTEuNDItMS40MWwtNC42MSA0LjYxYTEgMSAwIDAgMCAuMzMgMS43MnoiLz48L3N2Zz4=';
+// A simple, professional placeholder for artisans without a gallery image.
+// This is a transparent 1x1 PNG.
+export const DEFAULT_ARTISAN_IMAGE_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';

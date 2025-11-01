@@ -30,15 +30,13 @@ const assetsToCache = [
   '/components/PwaFeaturesModal.tsx',
   
   // Icons and Images
-  '/icon.svg',
-  '/maskable-icon.svg',
-  '/icon-192.svg',
-  '/icon-512.svg',
+  '/icon.png',
+  '/maskable-icon.png',
   '/icon-192.png',
   '/icon-512.png',
-  '/screenshot-desktop.svg',
-  '/screenshot-mobile.svg',
-  '/widget-screenshot.svg',
+  '/screenshot-desktop.png',
+  '/screenshot-mobile.png',
+  '/widget-screenshot.png',
 
   // External assets
   'https://cdn.tailwindcss.com',
