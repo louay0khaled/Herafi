@@ -31,6 +31,10 @@ const assetsToCache = [
   // Icons and Images
   '/icon.svg',
   '/maskable-icon.svg',
+  '/icon-192.svg',
+  '/icon-512.svg',
+  '/screenshot-desktop.svg',
+  '/screenshot-mobile.svg',
 
   // External assets
   'https://cdn.tailwindcss.com',

@@ -28,10 +28,38 @@
       "purpose": "any"
     },
     {
+      "src": "/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
       "src": "/maskable-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.svg",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "عرض قائمة الحرفيين على الكمبيوتر"
+    },
+    {
+      "src": "/screenshot-mobile.svg",
+      "sizes": "640x1136",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "عرض صفحة الحرفي على الموبايل"
     }
   ],
   "shortcuts": [
