@@ -5,32 +5,32 @@ const CACHE = "pwabuilder-offline-page";
 
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 
-const offlineFallbackPage = "index.html";
+const offlineFallbackPage = "/index.html";
 
 // A more comprehensive list of assets to cache for a full offline experience.
 const assetsToCache = [
   // Core files
   '/',
   offlineFallbackPage,
-  'manifest.json',
+  '/manifest.json',
   
   // Scripts
-  'index.tsx',
-  'App.tsx',
-  'types.ts',
-  'constants.ts',
+  '/index.tsx',
+  '/App.tsx',
+  '/types.ts',
+  '/constants.ts',
 
   // Components
-  'components/ArtisanCard.tsx',
-  'components/ArtisanProfileModal.tsx',
-  'components/FilterPanel.tsx',
-  'components/icons.tsx',
-  'components/SplashScreen.tsx',
-  'components/StarRating.tsx',
+  '/components/ArtisanCard.tsx',
+  '/components/ArtisanProfileModal.tsx',
+  '/components/FilterPanel.tsx',
+  '/components/icons.tsx',
+  '/components/SplashScreen.tsx',
+  '/components/StarRating.tsx',
   
   // Icons and Images
-  'icon.svg',
-  'maskable-icon.svg',
+  '/icon.svg',
+  '/maskable-icon.svg',
 
   // External assets
   'https://cdn.tailwindcss.com',

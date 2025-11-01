@@ -12,7 +12,7 @@ const assetsToCache = [
   // Core files
   '/',
   offlineFallbackPage,
-  '/public/manifest.json',
+  '/manifest.json',
   
   // Scripts
   '/index.tsx',
@@ -29,8 +29,8 @@ const assetsToCache = [
   '/components/StarRating.tsx',
   
   // Icons and Images
-  '/public/icon.svg',
-  '/public/maskable-icon.svg',
+  '/icon.svg',
+  '/maskable-icon.svg',
 
   // External assets
   'https://cdn.tailwindcss.com',
