@@ -1,28 +1,56 @@
 {
-  "name": "حِرَفي | Artisan Connect",
-  "short_name": "حِرَفي",
-  "description": "تطبيق أنيق يربط الحرفيين المهرة بالعملاء الذين يحتاجون إلى خدماتهم.",
+  "name": "Herafi - تطبيق الحرفيين",
+  "short_name": "Herafi",
+  "description": "منصة ذكية تربطك بأفضل الحرفيين القريبين منك. ابحث، قيّم، وشارك تجربتك بسهولة.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "id": "/",
   "lang": "ar",
   "dir": "rtl",
-  "start_url": "/index.html",
-  "id": "/",
-  "scope": "/",
+  "orientation": "portrait",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "background_color": "#F7F5F2",
-  "theme_color": "#0B2545",
-  "categories": [
-    "business",
-    "lifestyle",
-    "utilities"
-  ],
+  "display_override": ["fullscreen", "standalone", "minimal-ui", "window-controls-overlay"],
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "categories": ["business", "productivity", "utilities", "social"],
   "prefer_related_applications": false,
+
   "icons": [
+    {
+      "src": "/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png"
     },
     {
       "src": "/icon-512.png",
@@ -31,82 +59,87 @@
       "purpose": "any"
     },
     {
-      "src": "/icon.png",
-      "sizes": "any",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
       "src": "/maskable-icon.png",
-      "sizes": "any",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
+
   "screenshots": [
     {
-      "src": "/screenshot-desktop.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "عرض قائمة الحرفيين على الكمبيوتر"
-    },
-    {
       "src": "/screenshot-mobile.png",
-      "sizes": "640x1136",
+      "sizes": "1080x1920",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "عرض صفحة الحرفي على الموبايل"
+      "label": "الصفحة الرئيسية لتطبيق حرفي على الهاتف"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "واجهة تطبيق حرفي على الحاسوب"
+    },
+    {
+      "src": "/widget-screenshot.png",
+      "sizes": "800x600",
+      "type": "image/png",
+      "label": "الودجت التفاعلي للتطبيق"
     }
   ],
+
   "shortcuts": [
     {
-      "name": "ابحث عن حرفي",
-      "short_name": "بحث",
-      "description": "ابحث عن حرفيين مهرة بالقرب منك",
-      "url": "/",
-      "icons": [
-        {
-          "src": "/icon.png",
-          "sizes": "any",
-          "type": "image/png"
-        }
-      ]
+      "name": "الحرفيون القريبون",
+      "short_name": "قريبون",
+      "description": "اعرض قائمة الحرفيين القريبين من موقعك الحالي.",
+      "url": "/?view=nearby",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "تقييماتي",
+      "short_name": "تقييماتي",
+      "description": "اعرض جميع التقييمات التي أضفتها.",
+      "url": "/?view=reviews",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "إضافة حرفي",
+      "short_name": "إضافة",
+      "description": "أضف حرفيًا جديدًا إلى المنصة.",
+      "url": "/?add=artisan",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ],
-  "launch_handler": {
-    "client_mode": "focus-existing"
-  },
+
+  "protocol_handlers": [
+    {
+      "protocol": "web+herafi",
+      "url": "/?ref=%s"
+    }
+  ],
+
   "share_target": {
     "action": "/share-target",
     "method": "POST",
     "enctype": "multipart/form-data",
     "params": {
       "title": "title",
-      "text": "text"
-    }
-  },
-  "widgets": [
-    {
-      "name": "حرفي متميز",
-      "description": "عرض حرفي متميز من قائمتك",
-      "tag": "featured-artisan",
-      "template": "ms-adaptive-card",
-      "data": "/widget-data.json",
-      "screenshots": [
+      "text": "text",
+      "url": "url",
+      "files": [
         {
-          "src": "/widget-screenshot.png",
-          "sizes": "600x600",
-          "type": "image/png"
-        }
-      ],
-      "icons": [
-        {
-          "src": "/icon.png",
-          "sizes": "any",
-          "type": "image/png"
+          "name": "file",
+          "accept": ["image/*"]
         }
       ]
     }
-  ]
+  },
+
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": "auto"
+  },
+  "capture_links": "new-client"
 }
